@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/opts"
+require_relative "../lib/commands/group_refunded_transactions"
+
+options = Opts.parse
+Commands::GroupRefundedTransactions.call(options)
