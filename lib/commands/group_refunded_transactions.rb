@@ -56,6 +56,16 @@ module Commands
         [refund, matching_charges] unless matching_charges.empty?
       }.compact.to_h
 
+      unless offsetting_transactions.empty? || options.confirm || Cli.confirm(<<~MSG, default: false)
+        This script has detected #{offsetting_transactions.size} refunds that it will now group
+        in order to offset them in Lunch Money's Transactions view.
+
+        Proceed?
+      MSG
+        Cli.out "Exiting"
+        exit 0
+      end
+
       offsetting_transactions.each do |(refund, matching_charges)|
         charge = matching_charges.first
         Cli.out "Payment of #{charge["amount"]} #{charge["currency"].upcase} made to #{charge["payee"]} on #{charge["date"]} was refunded on #{refund["date"]}"
