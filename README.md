@@ -42,3 +42,16 @@ The script can also be run non-interactively with command line options like this
 $ ./script/group_refunded_transactions --access-token abcdef1234 --start-date 2020-01-01 --confirm
 ```
 
+You can see available command-line options with the `--help` option:
+
+```
+./script/group_refunded_transactions --help
+Usage: group_refunded_transactions [options]
+        --api-key, --access-token [ACCESS_TOKEN]
+                                     Lunch Money Access Token (V1 API Key)
+    -s, --start-date [YYYY-MM-DD]    Start Date
+        --[no-]confirm               Automatically confirm prompts
+        --[no-]dry-run               Don't make changes in Lunch Money
+    -h, --help                       Prints this help
+```
+

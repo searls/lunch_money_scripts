@@ -8,9 +8,10 @@ module Opts
     :api_key,
     :start_date,
     :confirm,
+    :dry_run,
     keyword_init: true
   )
-    def initialize(api_key: ApiKey.load_api_key, confirm: false, **kwargs)
+    def initialize(api_key: ApiKey.load_api_key, confirm: false, dry_run: false, **kwargs)
       super
     end
   end
@@ -29,6 +30,15 @@ module Opts
 
         opts.on("--[no-]confirm", "Automatically confirm prompts") do |confirm|
           options.confirm = confirm
+        end
+
+        opts.on("--[no-]dry-run", "Don't make changes in Lunch Money") do |dry_run|
+          options.dry_run = dry_run
+        end
+
+        opts.on("-h", "--help", "Prints this help") do
+          puts opts
+          exit 0
         end
       }.parse!
     end

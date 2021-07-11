@@ -13,11 +13,11 @@ module Api
   def self.get(api_key:, path:, options:, data_key: path, offset: 0)
     uri = URI(ENDPOINT + path + query_string(options.merge({offset: offset, limit: 500})))
     Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-      req = Net::HTTP::Get.new(uri)
+      req = Net::HTTP::Get.new(uri.request_uri)
       req["Authorization"] = "Bearer #{api_key}"
       response = http.request(req)
       json = JSON.parse(response.body)
-      raise json["error"] if json["error"]
+      raise_api_error_maybe(json)
       results = json[data_key]
       if results.length > 0
         puts "Fetched #{results.length} (#{results.length + offset} total) #{data_key}"
@@ -30,6 +30,31 @@ module Api
         )
       end
       return results
+    end
+  end
+
+  def self.post(api_key:, path:, body:)
+    uri = URI(ENDPOINT + path)
+    Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+      req = Net::HTTP::Post.new(uri.request_uri)
+      req["Authorization"] = "Bearer #{api_key}"
+      req["Content-Type"] = "application/json"
+      req.set_form_data(body)
+      response = http.request(req)
+      json = JSON.parse(response.body)
+      raise_api_error_maybe(json)
+      json
+    end
+  end
+
+  def self.raise_api_error_maybe(json)
+    return unless json.is_a?(Hash) && json["error"]
+    if json["error"].is_a?(String)
+      raise json["error"]
+    elsif json["error"].is_a?(Array)
+      raise json["error"].join("\n")
+    else
+      raise json["error"].inspect
     end
   end
 end

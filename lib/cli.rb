@@ -12,8 +12,13 @@ module Cli
     Readline.readline.strip
   end
 
-  def self.confirm(msg)
-    confirmation = self.in(msg, prompt: "[y/N] ")
-    confirmation.downcase.start_with?("y")
+  def self.confirm(msg, default: false)
+    if default
+      confirmation = self.in(msg, prompt: "[Y/n] ")
+      !confirmation.downcase.start_with?("n")
+    else
+      confirmation = self.in(msg, prompt: "[y/N] ")
+      confirmation.downcase.start_with?("y")
+    end
   end
 end
