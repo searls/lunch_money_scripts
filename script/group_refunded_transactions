@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require_relative "../lib/gems"
 require_relative "../lib/opts"
 require_relative "../lib/commands/group_refunded_transactions"
 
