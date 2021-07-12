@@ -7,10 +7,9 @@ You'll need a working Ruby environment on your machine (I use
 
 ```
 $ bundle
-$ ./script/group_refunded_transactions
 ```
 
-You'll be asked for your lunch money access token, which you can create in the
+You'll also be asked for your lunch money access token, which you can create in the
 [developer tab](https://my.lunchmoney.app/developers) of your account settings.
 
 ## Group Refunded Transactions
