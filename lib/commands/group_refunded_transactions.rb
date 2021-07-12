@@ -26,7 +26,7 @@ module Commands
       # Get their API Key if you don't have it
       unless options.api_key ||= ApiKey.load_api_key
         options.api_key = Cli.in("Enter your LunchMoney Access Token")
-        ApiKey.store_api_key(api_key)
+        ApiKey.store_api_key(options.api_key)
       end
 
       # Ask for a start date
