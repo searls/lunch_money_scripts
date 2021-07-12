@@ -11,6 +11,7 @@ module ApiKey
 
   def self.store_api_key(api_key)
     raise "Access Token '#{api_key}' does not appear to be valid" unless valid?(api_key)
+    Keyring.new.delete_password("lunch_money", "api_key")
     Keyring.new.set_password("lunch_money", "api_key", api_key)
   end
 end
