@@ -49,12 +49,18 @@ module Api
 
   def self.raise_api_error_maybe(json)
     return unless json.is_a?(Hash) && json["error"]
-    if json["error"].is_a?(String)
-      raise json["error"]
+    message = if json["error"].is_a?(String)
+      json["error"]
     elsif json["error"].is_a?(Array)
-      raise json["error"].join("\n")
+      json["error"].join("\n")
     else
-      raise json["error"].inspect
+      json["error"].inspect
+    end
+
+    if message.include?("is in a transaction group already")
+      warn message
+    else
+      raise message
     end
   end
 end
