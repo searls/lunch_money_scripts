@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+require "bundler"
+Bundler.setup
+
+require_relative "../lib/opts"
+require_relative "../lib/commands/summarize_transactions"
+
+options = Opts.parse
+Commands::SummarizeTransactions.call(options)

@@ -7,6 +7,7 @@ module Opts
   class Options < Struct.new(
     :api_key,
     :start_date,
+    :month,
     :confirm,
     :dry_run,
     keyword_init: true
@@ -26,6 +27,10 @@ module Opts
 
         opts.on("-s", "--start-date [YYYY-MM-DD]", Date, "Start Date") do |start_date|
           options.start_date = start_date
+        end
+
+        opts.on("-m", "--target-month [YYYY-MM-DD]", Date, "Target Month") do |target_month|
+          options.month = month
         end
 
         opts.on("--[no-]confirm", "Automatically confirm prompts") do |confirm|

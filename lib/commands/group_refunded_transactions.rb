@@ -1,11 +1,16 @@
 require "date"
 require "bigdecimal"
+require_relative "helpers"
 require_relative "../cli"
 require_relative "../api_key"
 require_relative "../api"
 
 module Commands
   module GroupRefundedTransactions
+    class << self
+      include Helpers
+    end
+
     def self.call(options)
       # Tell the user what's up
       unless options.confirm || Cli.confirm(<<~MSG, default: true)
@@ -23,17 +28,10 @@ module Commands
         exit 0
       end
 
-      # Get their API Key if you don't have it
-      unless options.api_key
-        options.api_key = Cli.in("Enter your LunchMoney Access Token")
-        ApiKey.store_api_key(options.api_key)
-      end
+      require_api_key!(options)
 
       # Ask for a start date
-      options.start_date ||= Date.parse(Cli.in(
-        "How far back do you want to search transactions?",
-        prompt: "(YYYY-MM-DD) "
-      ))
+      options.start_date ||= ask_date "(YYYY-MM-DD)", "How far back do you want to search transactions?"
 
       # Search for ungrouped, non-recurring transactions
       transactions = Api.get(
