@@ -30,7 +30,7 @@ module Opts
         end
 
         opts.on("-m", "--target-month [YYYY-MM-DD]", Date, "Target Month") do |target_month|
-          options.month = month
+          options.month = target_month
         end
 
         opts.on("--[no-]confirm", "Automatically confirm prompts") do |confirm|

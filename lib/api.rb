@@ -19,8 +19,10 @@ module Api
       json = JSON.parse(response.body)
       raise_api_error_maybe(json)
       results = json[data_key]
-      if results.length > 0
-        puts "Fetched #{results.length} (#{results.length + offset} total) #{data_key}"
+      if results.length > 0 && path == "transactions" # only transactions supports offset
+        if ENV["DEBUG"]
+          puts "Fetched #{results.length} (#{results.length + offset} total) #{data_key}"
+        end
         results += get(
           api_key: api_key,
           path: path,
