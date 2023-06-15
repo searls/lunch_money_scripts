@@ -6,5 +6,10 @@ Bundler.setup
 require_relative "../lib/opts"
 require_relative "../lib/commands/summarize_transactions"
 
+# Probably want to call in a quiet way if you want to pipe the
+# resulting markdown somewhere:
+#
+# ./script/summarize_transactions --confirm --target-month 2023-05-01 --start-date 2021-01-01
+
 options = Opts.parse
 Commands::SummarizeTransactions.call(options)
