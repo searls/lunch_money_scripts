@@ -54,6 +54,10 @@ module Commands
         Month.new(year: y, month: m)
       }
 
+      _, target_month_transactions = tx_by_month.find { |month, _|
+        month.to_date == options.month
+      }
+
       monthly_totals = tx_by_month.map { |month, txs|
         [month, txs.sum { |t| BigDecimal(t["amount"]) }]
       }.to_h
@@ -68,6 +72,7 @@ module Commands
       total = transactions.sum { |t| BigDecimal(t["amount"]) }
       monthly_mean = total / tx_by_month.size
       monthly_median = median(monthly_totals.values)
+      top_transactions = target_month_transactions.sort_by { |t| BigDecimal(t["amount"]) }.reverse.take(20)
 
       puts <<~MARKDOWN
         ## Spending for #{to_ym(options.month)}
@@ -81,8 +86,12 @@ module Commands
           * Median: **#{cash monthly_median}**
           * Total: **#{cash total}**
 
-        Top 20 transactions:
-        TODO
+        Top #{top_transactions.size} transactions:
+
+        #{top_transactions.map { |t|
+          "  * #{t["payee"]} [#{Date.parse(t["date"]).strftime("%-m/%-d")}] - #{cash t["amount"]}"
+        }.join("\n")}
+
       MARKDOWN
     end
   end
